@@ -132,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     loadDataFromSharedPreferences();
-    Timer.periodic(Duration(milliseconds: 100), (Timer t) => setState(() { total_money = degiro_value + etoro_value + rforex_value + kraken_value + caixa_value + getMonthlyMoney();}));
+    Timer.periodic(Duration(milliseconds: 0), (Timer t) => setState(() { total_money = degiro_value + etoro_value + rforex_value + kraken_value + caixa_value + getMonthlyMoney();}));
     super.initState();
   }
 
@@ -361,14 +361,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           width: MediaQuery.of(context).size.width * 0.70,
                           height: MediaQuery.of(context).size.width * 0.20,
                           decoration: BoxDecoration(
-                          
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.amber,
-                          border: Border.all(width: 3)
-                          
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.amber,
+                            border: Border.all(width: 3),
+                            boxShadow: [
+                              BoxShadow(blurRadius: 5)
+                            ]
                           ),
-                          child: Center(
-                            child: Text(double.parse((total_money).toStringAsFixed(5)).toString().length == 11 ? double.parse((total_money).toStringAsFixed(5)).toString() + "€" : double.parse((total_money).toStringAsFixed(5)).toString() + "0€",
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 18, 0, 20),
+                            child: Text(
+                              double.parse((total_money).toStringAsFixed(5)).toString().length == 11
+                              ? double.parse((total_money).toStringAsFixed(5)).toString() + "€" 
+                              : double.parse((total_money).toStringAsFixed(5)).toString() + "0€",
+                            textAlign: TextAlign.left,  
                             style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: "monospace"),
                             ),
                           ),
