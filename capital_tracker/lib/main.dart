@@ -43,6 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _textFieldController_etoro = TextEditingController();
   FocusNode _focus_rforex = FocusNode();
   TextEditingController _textFieldController_rforex = TextEditingController();
+  FocusNode _focus_kraken = FocusNode();
+  TextEditingController _textFieldController_kraken = TextEditingController();
   FocusNode _focus_caixa = FocusNode();
   TextEditingController _textFieldController_caixa = TextEditingController();
 
@@ -51,6 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double degiro_value = 0;
   double etoro_value = 0;
   double rforex_value = 0;
+  double kraken_value = 0;
   double caixa_value = 0;
 
   double total_money = 0;
@@ -63,9 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
       _textFieldController_etoro.text = etoro_value.toString() + "€";
       rforex_value = (prefs.getDouble('rforex_value') ?? 0);
       _textFieldController_rforex.text = rforex_value.toString() + "€";
+      kraken_value = (prefs.getDouble('kraken_value') ?? 0);
+      _textFieldController_rforex.text = kraken_value.toString() + "€";
       caixa_value = (prefs.getDouble('caixa_value') ?? 0);
       _textFieldController_caixa.text = caixa_value.toString() + "€";
-      total_money = degiro_value + etoro_value + rforex_value + caixa_value;
+      total_money = degiro_value + etoro_value + rforex_value + kraken_value + caixa_value;
     });
   }
 
@@ -73,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _textFieldController_degiro.text = degiro_value.toString() + "€";
     _textFieldController_etoro.text = etoro_value.toString() + "€";
     _textFieldController_rforex.text = rforex_value.toString() + "€";
+    _textFieldController_kraken.text = kraken_value.toString() + "€";
     _textFieldController_caixa.text = caixa_value.toString() + "€";
   }
   
@@ -118,12 +124,15 @@ class _MyHomePageState extends State<MyHomePage> {
     _focus_rforex.addListener(() {
       if (_focus_degiro.hasFocus) _textFieldController_degiro.clear();
     });
+    _focus_kraken.addListener(() {
+      if (_focus_kraken.hasFocus) _textFieldController_kraken.clear();
+    });
     _focus_caixa.addListener(() {
       if (_focus_degiro.hasFocus) _textFieldController_degiro.clear();
     });
 
     loadDataFromSharedPreferences();
-    Timer.periodic(Duration(milliseconds: 100), (Timer t) => setState(() { total_money = degiro_value + etoro_value + rforex_value + caixa_value + getMonthlyMoney();}));
+    Timer.periodic(Duration(milliseconds: 100), (Timer t) => setState(() { total_money = degiro_value + etoro_value + rforex_value + kraken_value + caixa_value + getMonthlyMoney();}));
     super.initState();
   }
 
@@ -252,6 +261,45 @@ class _MyHomePageState extends State<MyHomePage> {
                                 rforex_value = double.parse(value);
                                 prefs.then((SharedPreferences prefs) {
                                   prefs.setDouble("rforex_value", double.parse(value));
+                                });
+                                updateTextFields();
+                              },
+                            ),
+                          ),
+                        ),
+                      ]
+                    ),
+                  )
+                ),
+                Material(
+                  type: MaterialType.canvas,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10, left: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children : [
+                        Image(image: AssetImage("assets/kraken.png"),
+                        height: 50,
+                        width: 50,),
+                        SizedBox(width:5,),
+                        Text('Kraken:',
+                        style: TextStyle(color: Colors.black, fontSize: 25.0),
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: TextFormField(
+                              controller: _textFieldController_kraken,
+                              focusNode: _focus_kraken,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder()
+                              ),
+                              onFieldSubmitted: (String value) async {
+                                kraken_value = double.parse(value);
+                                prefs.then((SharedPreferences prefs) {
+                                  prefs.setDouble("kraken_value", double.parse(value));
                                 });
                                 updateTextFields();
                               },
