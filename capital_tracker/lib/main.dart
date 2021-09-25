@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
       rforex_value = (prefs.getDouble('rforex_value') ?? 0);
       _textFieldController_rforex.text = rforex_value.toString() + "€";
       kraken_value = (prefs.getDouble('kraken_value') ?? 0);
-      _textFieldController_rforex.text = kraken_value.toString() + "€";
+      _textFieldController_kraken.text = kraken_value.toString() + "€";
       caixa_value = (prefs.getDouble('caixa_value') ?? 0);
       _textFieldController_caixa.text = caixa_value.toString() + "€";
       total_money = degiro_value + etoro_value + rforex_value + kraken_value + caixa_value;
@@ -119,16 +119,16 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_focus_degiro.hasFocus) _textFieldController_degiro.clear();
     });
     _focus_etoro.addListener(() {
-      if (_focus_degiro.hasFocus) _textFieldController_degiro.clear();
+      if (_focus_degiro.hasFocus) _textFieldController_etoro.clear();
     });
     _focus_rforex.addListener(() {
-      if (_focus_degiro.hasFocus) _textFieldController_degiro.clear();
+      if (_focus_degiro.hasFocus) _textFieldController_rforex.clear();
     });
     _focus_kraken.addListener(() {
       if (_focus_kraken.hasFocus) _textFieldController_kraken.clear();
     });
     _focus_caixa.addListener(() {
-      if (_focus_degiro.hasFocus) _textFieldController_degiro.clear();
+      if (_focus_degiro.hasFocus) _textFieldController_caixa.clear();
     });
 
     loadDataFromSharedPreferences();
@@ -142,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return CupertinoPageScaffold(
       backgroundColor: Colors.transparent,
       child: CustomScrollView(
+        physics: NeverScrollableScrollPhysics(),
         slivers: [
           CupertinoSliverNavigationBar(
             largeTitle: Text("Capital tracker"),
