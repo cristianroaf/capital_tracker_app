@@ -45,6 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _textFieldController_rforex = TextEditingController();
   FocusNode _focus_kraken = FocusNode();
   TextEditingController _textFieldController_kraken = TextEditingController();
+  FocusNode _focus_mintos = FocusNode();
+  TextEditingController _textFieldController_mintos = TextEditingController();
   FocusNode _focus_caixa = FocusNode();
   TextEditingController _textFieldController_caixa = TextEditingController();
 
@@ -54,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
   double etoro_value = 0;
   double rforex_value = 0;
   double kraken_value = 0;
+  double mintos_value = 0;
   double caixa_value = 0;
 
   double total_money = 0;
@@ -68,6 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _textFieldController_rforex.text = rforex_value.toString() + "€";
       kraken_value = (prefs.getDouble('kraken_value') ?? 0);
       _textFieldController_kraken.text = kraken_value.toString() + "€";
+      mintos_value = (prefs.getDouble('mintos_value') ?? 0);
+      _textFieldController_mintos.text = mintos_value.toString() + "€";
       caixa_value = (prefs.getDouble('caixa_value') ?? 0);
       _textFieldController_caixa.text = caixa_value.toString() + "€";
       total_money = degiro_value + etoro_value + rforex_value + kraken_value + caixa_value;
@@ -79,6 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
     _textFieldController_etoro.text = etoro_value.toString() + "€";
     _textFieldController_rforex.text = rforex_value.toString() + "€";
     _textFieldController_kraken.text = kraken_value.toString() + "€";
+    _textFieldController_mintos.text = mintos_value.toString() + "€";
     _textFieldController_caixa.text = caixa_value.toString() + "€";
   }
   
@@ -127,12 +133,15 @@ class _MyHomePageState extends State<MyHomePage> {
     _focus_kraken.addListener(() {
       if (_focus_kraken.hasFocus) _textFieldController_kraken.clear();
     });
+    _focus_mintos.addListener(() {
+      if (_focus_mintos.hasFocus) _textFieldController_mintos.clear();
+    });
     _focus_caixa.addListener(() {
       if (_focus_degiro.hasFocus) _textFieldController_caixa.clear();
     });
 
     loadDataFromSharedPreferences();
-    Timer.periodic(Duration(milliseconds: 0), (Timer t) => setState(() { total_money = degiro_value + etoro_value + rforex_value + kraken_value + caixa_value + getMonthlyMoney();}));
+    Timer.periodic(Duration(milliseconds: 0), (Timer t) => setState(() { total_money = degiro_value + etoro_value + rforex_value + kraken_value + mintos_value + caixa_value + getMonthlyMoney();}));
     super.initState();
   }
 
@@ -150,10 +159,11 @@ class _MyHomePageState extends State<MyHomePage> {
           SliverList(
             delegate: SliverChildListDelegate(
               [
+                SizedBox(height: 1),
                 Material(
-                  type: MaterialType.canvas,
+                  type: MaterialType.card,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
+                    padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children : [
@@ -189,10 +199,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )
                 ),
+                SizedBox(height: 1),
                 Material(
-                  type: MaterialType.canvas,
+                  type: MaterialType.card,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
+                    padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children : [
@@ -229,10 +240,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )
                 ),
+                SizedBox(height: 1),
                 Material(
-                  type: MaterialType.canvas,
+                  type: MaterialType.card,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
+                    padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children : [
@@ -272,10 +284,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )
                 ),
+                SizedBox(height: 1),
                 Material(
-                  type: MaterialType.canvas,
+                  type: MaterialType.card,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
+                    padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children : [
@@ -311,10 +324,51 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )
                 ),
+                SizedBox(height: 1),
                 Material(
-                  type: MaterialType.canvas,
+                  type: MaterialType.card,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10, left: 10),
+                    padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children : [
+                        Image(image: AssetImage("assets/mintos.png"),
+                        height: 50,
+                        width: 50,),
+                        SizedBox(width:5,),
+                        Text('Mintos:',
+                          style: TextStyle(color: Colors.black, fontSize: 25.0),
+                        ),
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: TextFormField(
+                              controller: _textFieldController_mintos,
+                              focusNode: _focus_mintos,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                border: OutlineInputBorder()
+                              ),
+                              onFieldSubmitted: (String value) async {
+                                mintos_value = double.parse(value);
+                                prefs.then((SharedPreferences prefs) {
+                                  prefs.setDouble("mintos_value", double.parse(value));
+                                });
+                                updateTextFields();
+                              },
+                            ),
+                          ),
+                        ),
+                      ]
+                    ),
+                  )
+                ),
+                SizedBox(height: 1),
+                Material(
+                  type: MaterialType.card,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10, left: 10, bottom: 10),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children : [
@@ -351,10 +405,12 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   )
                 ),
+                SizedBox(height: 1),
                 Material(
-                  type: MaterialType.canvas,
+                  type: MaterialType.card,
+                  color: Colors.white,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 50),
+                    padding: EdgeInsets.only(top: 65),
                     child: Center(
                       child: Padding(
                         padding: EdgeInsets.only(bottom: 500),
@@ -384,6 +440,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     )
                   )
                 ),
+                SizedBox(height: 1),
               ]
             )
           ),

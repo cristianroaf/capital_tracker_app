@@ -46,6 +46,7 @@ flutter:
     - assets/roboforex.png
     - assets/lacaixa.png
     - assets/kraken.png
+    - assets/mintos.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
